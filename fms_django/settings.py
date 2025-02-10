@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import site
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -80,11 +81,15 @@ WSGI_APPLICATION = 'fms_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'fms_django.backends.sqlite_cloud',  # Path to your custom backend
+        'NAME': 'sqlitecloud://cp89lrlkhz.g3.sqlite.cloud:8860/db.sqlite3?apikey=waBpQXRhGgsozjGP36WGnQbb4qObvnubtoUaveBOyIc',
     }
 }
+import sqlitecloud
 
+url = "sqlitecloud://cp89lrlkhz.g3.sqlite.cloud:8860/db.sqlite3?apikey=waBpQXRhGgsozjGP36WGnQbb4qObvnubtoUaveBOyIc"
+conn = sqlitecloud.connect(url)
+print("Connection successful!")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -138,3 +143,19 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login'
 
 ID_ENCRYPTION_KEY = b'UdhnfelTxqj3q6BbPe7H86sfQnboSBzb0irm2atoFUw='
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        },
+    },
+}
